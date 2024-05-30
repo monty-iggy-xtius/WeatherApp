@@ -53,9 +53,11 @@ cd WeatherApp
 3. Run flutter doctor to see if you have any current issues on your system
 
 4. Run flutter run get to install the dependencies in the pubspec.yaml file
-```
-bash flutter run
-```
+
+Here are the commands to run
+```cd WeatherApp```
+```flutter doctor```
+```flutter run```
 
 
 ### Build and Run
