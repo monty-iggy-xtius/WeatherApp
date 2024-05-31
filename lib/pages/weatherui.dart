@@ -157,21 +157,21 @@ class _WeatherPageState extends State<WeatherPage> {
                   : "Find a place",
               style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 22,
                   fontFamily: "Rale"),
             ),
             Text(DateFormat.yMMMd().format(DateTime.now()),
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14,
+                    fontSize: 16,
                     fontFamily: "Rale")),
 
             SizedBox(height: _height * 0.03),
 
             // create an image for the weather icon
             Container(
-              width: _width * 0.46,
-              height: _width * 0.46,
+              width: _width * 0.56,
+              height: _width * 0.56,
               decoration: BoxDecoration(
                   color: Colors.transparent,
                   // borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -238,7 +238,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                   : "Wind Speed: 0",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   fontFamily: "Genos"),
                             ),
                             Text(
@@ -247,7 +247,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                   : "Visibility: 0",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   fontFamily: "Genos"),
                             ),
                             Text(
@@ -256,7 +256,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                   : "Humidity: 0",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   fontFamily: "Genos"),
                             )
                           ],

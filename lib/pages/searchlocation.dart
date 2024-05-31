@@ -27,90 +27,103 @@ class _SearchLocationState extends State<SearchLocation> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            height: _height * 0.35,
-            decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage("images/banner.png")),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15))),
-          ),
-          Container(
-            height: _height * 0.65,
-            padding: const EdgeInsets.all(11),
-            decoration: const BoxDecoration(),
-            child: SizedBox(
-                width: _width,
-                child: Column(
-                  children: [
-                    SizedBox(height: _width * .08),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              height: _height * 0.30,
+              decoration: const BoxDecoration(
+                  image:
+                      DecorationImage(image: AssetImage("images/banner.png")),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15))),
+            ),
+            Container(
+              height: _height * 0.65,
+              padding: const EdgeInsets.all(11),
+              decoration: const BoxDecoration(),
+              child: SizedBox(
+                  width: _width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: _width * .08),
 
-                    Form(
-                      key: _searchPageKey,
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        textAlign: TextAlign.center,
-                        cursorColor: Colors.deepOrangeAccent[900],
-                        showCursor: true,
-                        style:
-                            const TextStyle(color: Colors.teal, fontSize: 17),
-                        decoration: InputDecoration(
-                            hintText: "E.g Mombasa, Helsinki",
-                            filled: true,
-                            fillColor: Colors.grey[300]?.withOpacity(.45),
-                            // default border style
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(23),
+                      ListView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          Form(
+                            key: _searchPageKey,
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              textAlign: TextAlign.center,
+                              cursorColor: Colors.deepOrangeAccent[900],
+                              showCursor: true,
+                              style: const TextStyle(
+                                  color: Colors.teal, fontSize: 17),
+                              decoration: InputDecoration(
+                                  hintText: "E.g Mombasa, Helsinki",
+                                  filled: true,
+                                  fillColor: Colors.grey[300]?.withOpacity(.45),
+                                  // default border style
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(23),
+                                  ),
+                                  // border style when the text field is focused
+                                  // should be a white border all round the input field with a radius of 23
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(23),
+                                      borderSide: BorderSide(
+                                        color: Colors.teal.shade400,
+                                      )),
+                                  // border style when the app runs in default
+                                  // should be a white border all round the input field
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(23),
+                                      borderSide: const BorderSide(
+                                        color: Colors.white,
+                                      ))),
+                              validator: (value) => value!.isEmpty
+                                  ? "Please type in a location"
+                                  : null,
+                              onChanged: (value) {
+                                setState(() {
+                                  _placeToSearch = value.trim();
+                                });
+                              },
                             ),
-                            // border style when the text field is focused
-                            // should be a white border all round the input field with a radius of 23
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(23),
-                                borderSide: BorderSide(
-                                  color: Colors.teal.shade400,
-                                )),
-                            // border style when the app runs in default
-                            // should be a white border all round the input field
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(23),
-                                borderSide: const BorderSide(
-                                  color: Colors.white,
-                                ))),
-                        validator: (value) =>
-                            value!.isEmpty ? "Please type in a location" : null,
-                        onChanged: (value) {
-                          setState(() {
-                            _placeToSearch = value.trim();
-                          });
-                        },
+                          ),
+                        ],
                       ),
-                    ),
 
-                    SizedBox(height: _width * .09),
+                      SizedBox(height: _width * .09),
 
-                    // Add the button
+                      // Add the button
 
-                    TextButton(
-                        onPressed: () {
-                          processWeatherData(context);
-                        },
-                        style: ButtonStyle(
-                          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                              const EdgeInsets.symmetric(
-                                  horizontal: 27, vertical: 18)),
-                          backgroundColor:
-                              WidgetStateProperty.all<Color>(Colors.teal),
-                        ),
-                        child: const Text("Get Weather",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 17)))
-                  ],
-                )),
-          ),
-        ],
+                      TextButton(
+                          onPressed: () {
+                            processWeatherData(context);
+                          },
+                          style: ButtonStyle(
+                            padding:
+                                WidgetStateProperty.all<EdgeInsetsGeometry>(
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 27, vertical: 18)),
+                            backgroundColor:
+                                WidgetStateProperty.all<Color>(Colors.teal),
+                          ),
+                          child: const Text("Get Weather",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 17)))
+                    ],
+                  )),
+            ),
+          ],
+        ),
       ),
     );
   }
