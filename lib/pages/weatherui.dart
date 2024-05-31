@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:weatherapp/provider/theme_provider.dart';
@@ -12,6 +13,13 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.bottom]);
+    super.initState();
+  }
+
   // create an empty list of data to be received
   Map retrivedWeatherData = {};
 
@@ -76,18 +84,11 @@ class _WeatherPageState extends State<WeatherPage> {
       }
     }
 
+    // initially the bottom scroll widget is an empty list
     var bottomScrollWidgets = [];
 
     retrivedWeatherData.isNotEmpty
         ? bottomScrollWidgets = [
-            additionalConditions(
-                Colors.teal.shade400,
-                retrivedWeatherData['forecast'][0]['day']['avgtemp_c'] != null
-                    ? retrivedWeatherData['forecast'][0]['day']['avgtemp_c']
-                        .toString()
-                    : "----",
-                getDay(retrivedWeatherData['forecast'][0]['date']),
-                retrivedWeatherData['forecast'][0]['day']['condition']['text']),
             additionalConditions(
                 Colors.teal.shade400,
                 retrivedWeatherData['forecast'][1]['day']['avgtemp_c'] != null
@@ -104,6 +105,14 @@ class _WeatherPageState extends State<WeatherPage> {
                     : "----",
                 getDay(retrivedWeatherData['forecast'][2]['date']),
                 retrivedWeatherData['forecast'][2]['day']['condition']['text']),
+            additionalConditions(
+                Colors.teal.shade400,
+                retrivedWeatherData['forecast'][3]['day']['avgtemp_c'] != null
+                    ? retrivedWeatherData['forecast'][3]['day']['avgtemp_c']
+                        .toString()
+                    : "----",
+                getDay(retrivedWeatherData['forecast'][3]['date']),
+                retrivedWeatherData['forecast'][3]['day']['condition']['text']),
           ]
         : bottomScrollWidgets = [
             additionalConditions(
@@ -114,7 +123,6 @@ class _WeatherPageState extends State<WeatherPage> {
       // extend body height behind app bar
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        // automaticallyImplyLeading: false,
         leading: PopupMenuButton<int>(
           color: Colors.teal[400],
           onSelected: (item) => handleClick(item, context),
@@ -126,6 +134,7 @@ class _WeatherPageState extends State<WeatherPage> {
                   style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Rale",
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 1),
                 )),
             const PopupMenuItem<int>(
@@ -135,11 +144,11 @@ class _WeatherPageState extends State<WeatherPage> {
                   style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Rale",
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 1),
                 )),
           ],
         ),
-
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -149,7 +158,7 @@ class _WeatherPageState extends State<WeatherPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(height: _height * 0.04),
+            SizedBox(height: _height * 0.048),
 
             Text(
               retrivedWeatherData.isNotEmpty
@@ -157,28 +166,28 @@ class _WeatherPageState extends State<WeatherPage> {
                   : "Find a place",
               style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 22,
+                  fontSize: 24,
                   fontFamily: "Rale"),
             ),
             Text(DateFormat.yMMMd().format(DateTime.now()),
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 18,
                     fontFamily: "Rale")),
 
             SizedBox(height: _height * 0.03),
 
             // create an image for the weather icon
             Container(
-              width: _width * 0.56,
-              height: _width * 0.56,
+              width: _width * 0.3,
+              height: _width * 0.3,
               decoration: BoxDecoration(
                   color: Colors.transparent,
                   // borderRadius: BorderRadius.all(Radius.circular(100)),
                   image: DecorationImage(
                       image: AssetImage(retrivedWeatherData.isNotEmpty
                           ? retrivedWeatherData['is_day'] == 1
-                              ? "/images/day/${retrivedWeatherData["img"].last}"
+                              ? "images/day/${retrivedWeatherData["img"].last}"
                               : "images/night/${retrivedWeatherData["img"].last}"
                           : "images/day/185.png"),
                       // image: AssetImage(image),
@@ -195,7 +204,7 @@ class _WeatherPageState extends State<WeatherPage> {
                   : "Pretty Chilly",
               style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 21,
                   fontFamily: "Rale"),
             ),
             // Actual current temperature
@@ -207,23 +216,25 @@ class _WeatherPageState extends State<WeatherPage> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Text.rich(TextSpan(children: [
-                      TextSpan(
-                          text: retrivedWeatherData.isNotEmpty
-                              ? retrivedWeatherData['temperature']
-                                  .toStringAsFixed(1)
-                              : "0",
-                          style: const TextStyle(
-                              fontSize: 68,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Rale")),
-                      const TextSpan(
-                          text: " °C",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              fontFamily: "Rale"))
-                    ])),
+                    child: Center(
+                      child: Text.rich(TextSpan(children: [
+                        TextSpan(
+                            text: retrivedWeatherData.isNotEmpty
+                                ? retrivedWeatherData['temperature']
+                                    .toStringAsFixed(1)
+                                : "0",
+                            style: const TextStyle(
+                                fontSize: 74,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Rale")),
+                        const TextSpan(
+                            text: " °C",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                                fontFamily: "Rale"))
+                      ])),
+                    ),
                   ),
                   Expanded(
                       flex: 1,
@@ -238,7 +249,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                   : "Wind Speed: 0",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                                  fontSize: 17,
                                   fontFamily: "Genos"),
                             ),
                             Text(
@@ -247,7 +258,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                   : "Visibility: 0",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                                  fontSize: 17,
                                   fontFamily: "Genos"),
                             ),
                             Text(
@@ -256,7 +267,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                   : "Humidity: 0",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                                  fontSize: 17,
                                   fontFamily: "Genos"),
                             )
                           ],
@@ -312,25 +323,30 @@ Widget additionalConditions(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(day,
+                  softWrap: true,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18.5,
+                      fontSize: 25.5,
                       fontFamily: 'Genos',
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.0)),
-              Text(temp,
+              Text("$temp °C",
+                  softWrap: true,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 21.5,
+                      fontSize: 22.5,
                       fontFamily: 'Genos',
                       overflow: TextOverflow.fade,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.0)),
               Text(condition,
+                  softWrap: true,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 11.5,
+                      fontSize: 15.5,
                       fontFamily: 'Genos',
                       overflow: TextOverflow.fade,
                       fontWeight: FontWeight.bold,

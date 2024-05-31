@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:weatherapp/components/custom_snackbar.dart';
 import 'package:weatherapp/models/weathermodel.dart';
 import 'package:weatherapp/services/getweather.dart';
@@ -11,6 +12,13 @@ class SearchLocation extends StatefulWidget {
 }
 
 class _SearchLocationState extends State<SearchLocation> {
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.bottom]);
+    super.initState();
+  }
+
   // values to use on the current page
   final _searchPageKey = GlobalKey<FormState>();
   String _placeToSearch = '';
@@ -22,6 +30,7 @@ class _SearchLocationState extends State<SearchLocation> {
     double _height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      // extend body height behind app bar
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -35,11 +44,8 @@ class _SearchLocationState extends State<SearchLocation> {
             Container(
               height: _height * 0.30,
               decoration: const BoxDecoration(
-                  image:
-                      DecorationImage(image: AssetImage("images/banner.png")),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15))),
+                image: DecorationImage(image: AssetImage("images/banner.png")),
+              ),
             ),
             Container(
               height: _height * 0.65,
@@ -104,7 +110,7 @@ class _SearchLocationState extends State<SearchLocation> {
 
                       // Add the button
 
-                      TextButton(
+                      FilledButton(
                           onPressed: () {
                             processWeatherData(context);
                           },
@@ -113,8 +119,8 @@ class _SearchLocationState extends State<SearchLocation> {
                                 WidgetStateProperty.all<EdgeInsetsGeometry>(
                                     const EdgeInsets.symmetric(
                                         horizontal: 27, vertical: 18)),
-                            backgroundColor:
-                                WidgetStateProperty.all<Color>(Colors.teal),
+                            backgroundColor: WidgetStateProperty.all<Color>(
+                                Colors.teal.shade400),
                           ),
                           child: const Text("Get Weather",
                               style:

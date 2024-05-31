@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -11,7 +12,10 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.bottom]);
     super.initState();
+
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, "/weather");
     });

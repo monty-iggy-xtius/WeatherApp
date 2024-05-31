@@ -8,7 +8,7 @@ class GetWeatherService {
     final queryParam = {
       'key': '179abcc559464fa08e845456242905',
       'q': query,
-      'days': '3',
+      'days': '4',
       'aqi': 'no',
       'alerts': 'no'
     };
