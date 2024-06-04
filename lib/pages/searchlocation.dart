@@ -15,7 +15,7 @@ class _SearchLocationState extends State<SearchLocation> {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.bottom]);
+        overlays: [SystemUiOverlay.top]);
     super.initState();
   }
 
@@ -42,91 +42,93 @@ class _SearchLocationState extends State<SearchLocation> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              height: _height * 0.30,
-              decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage("images/banner.png")),
-              ),
-            ),
+                color: Colors.teal.shade400,
+                height: _height * 0.28,
+                width: _width),
             Container(
-              height: _height * 0.65,
+              height: _height * 0.72,
               padding: const EdgeInsets.all(11),
-              decoration: const BoxDecoration(),
-              child: SizedBox(
-                  width: _width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      SizedBox(height: _width * .08),
-
-                      ListView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          Form(
-                            key: _searchPageKey,
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              textAlign: TextAlign.center,
-                              cursorColor: Colors.deepOrangeAccent[900],
-                              showCursor: true,
-                              style: const TextStyle(
-                                  color: Colors.teal, fontSize: 17),
-                              decoration: InputDecoration(
-                                  hintText: "E.g Mombasa, Helsinki",
-                                  filled: true,
-                                  fillColor: Colors.grey[300]?.withOpacity(.45),
-                                  // default border style
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(23),
-                                  ),
-                                  // border style when the text field is focused
-                                  // should be a white border all round the input field with a radius of 23
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(23),
-                                      borderSide: BorderSide(
-                                        color: Colors.teal.shade400,
-                                      )),
-                                  // border style when the app runs in default
-                                  // should be a white border all round the input field
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(23),
-                                      borderSide: const BorderSide(
-                                        color: Colors.white,
-                                      ))),
-                              validator: (value) => value!.isEmpty
-                                  ? "Please type in a location"
-                                  : null,
-                              onChanged: (value) {
-                                setState(() {
-                                  _placeToSearch = value.trim();
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: _width * .09),
-
-                      // Add the button
-
-                      FilledButton(
-                          onPressed: () {
-                            processWeatherData(context);
+                      Form(
+                        key: _searchPageKey,
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          textAlign: TextAlign.center,
+                          cursorColor: Colors.teal[400],
+                          showCursor: true,
+                          style:
+                              const TextStyle(color: Colors.teal, fontSize: 17),
+                          decoration: InputDecoration(
+                              hintText: "Type a location E.g Helsinki",
+                              filled: true,
+                              fillColor: Colors.grey[300]?.withOpacity(.45),
+                              // default border style
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(23),
+                              ),
+                              // border style when the text field is focused
+                              // should be a white border all round the input field with a radius of 23
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(23),
+                                  borderSide: BorderSide(
+                                    color: Colors.teal.shade400,
+                                  )),
+                              // border style when the app runs in default
+                              // should be a white border all round the input field
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(23),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                  ))),
+                          validator: (value) => value!.isEmpty
+                              ? "Please type in a location"
+                              : null,
+                          onChanged: (value) {
+                            setState(() {
+                              _placeToSearch = value.trim();
+                            });
                           },
-                          style: ButtonStyle(
-                            padding:
-                                WidgetStateProperty.all<EdgeInsetsGeometry>(
-                                    const EdgeInsets.symmetric(
-                                        horizontal: 27, vertical: 18)),
-                            backgroundColor: WidgetStateProperty.all<Color>(
-                                Colors.teal.shade400),
-                          ),
-                          child: const Text("Get Weather",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 17)))
+                        ),
+                      ),
                     ],
-                  )),
+                  ),
+
+                  SizedBox(height: _width * .09),
+
+                  // use a gesture detector to detect pressed events in the conatiner
+                  GestureDetector(
+                      onTap: () async {
+                        processWeatherData(context);
+                      },
+                      child:
+                          // use a container to define a button effect
+                          Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Container(
+                            width: 190,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 3.0, vertical: 17),
+                            decoration: BoxDecoration(
+                              color: Colors.teal.shade400,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Center(
+                              child: Text("Get Weather",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 17.3)),
+                            )),
+                      )),
+                ],
+              ),
             ),
           ],
         ),

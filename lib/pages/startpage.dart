@@ -13,7 +13,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.bottom]);
+        overlays: [SystemUiOverlay.top]);
     super.initState();
 
     Future.delayed(const Duration(seconds: 3), () {

@@ -16,7 +16,7 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.bottom]);
+        overlays: [SystemUiOverlay.top]);
     super.initState();
   }
 
@@ -115,8 +115,7 @@ class _WeatherPageState extends State<WeatherPage> {
                 retrivedWeatherData['forecast'][3]['day']['condition']['text']),
           ]
         : bottomScrollWidgets = [
-            additionalConditions(
-                Colors.teal.shade400, "No data", "----", "----")
+            additionalConditions(Colors.teal.shade400, "0", "----", "----")
           ];
 
     return Scaffold(
@@ -158,7 +157,7 @@ class _WeatherPageState extends State<WeatherPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(height: _height * 0.048),
+            SizedBox(height: _height * 0.028),
 
             Text(
               retrivedWeatherData.isNotEmpty
@@ -310,8 +309,8 @@ Widget additionalConditions(
         Color containerColor, String temp, String day, String condition) =>
     Container(
       margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
-      width: 135,
-      height: 135,
+      width: 155,
+      height: 155,
       decoration: BoxDecoration(
           color: containerColor,
           borderRadius: const BorderRadius.all(Radius.circular(23.0))),
@@ -327,7 +326,7 @@ Widget additionalConditions(
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 25.5,
+                      fontSize: 26.5,
                       fontFamily: 'Genos',
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.0)),
@@ -336,7 +335,7 @@ Widget additionalConditions(
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 22.5,
+                      fontSize: 24.5,
                       fontFamily: 'Genos',
                       overflow: TextOverflow.fade,
                       fontWeight: FontWeight.bold,
@@ -346,7 +345,7 @@ Widget additionalConditions(
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 15.5,
+                      fontSize: 16.5,
                       fontFamily: 'Genos',
                       overflow: TextOverflow.fade,
                       fontWeight: FontWeight.bold,
