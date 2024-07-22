@@ -12,8 +12,6 @@ This is a versatile mobile application project designed to provide users with ac
 
   - [Configuration](#configuration)
 
-  - [Build and Run](#build-and-run)
-
 - [Usage](#usage)
 
 - [License](#license)
@@ -39,32 +37,37 @@ Before you begin, ensure you have the following dependencies and tools installed
 
 - Dart
 
-- Visual Studio for editing the code
+- Code Editor e.g Visual Studio
+
+- An android emulator / physical device to run the app on
 
 
 ### Configuration
 
-1. Change your working directory to the cloned repository:
+1. After successfuly cloning this repo, change your working directory to the cloned repository:
 
+```bash
 cd WeatherApp
+```
 
-2. Make sure that you have configured your Android SDK and flutter correctly.
+2. Make sure that you have configured your Android SDK and flutter path correctly.
 
-3. Run flutter doctor to see if you have any current issues on your system
+3. Run `flutter doctor` to see if you have any current issues on your system
 
-4. Run flutter run get to install the dependencies in the pubspec.yaml file
+4. Run `flutter pub get` to install the dependencies in the pubspec.yaml file
 
-Here are the commands to run
-```cd WeatherApp```
-```flutter doctor```
-```flutter run```
+5. Make sure to connect your mobile device or start an emulator.
 
+6. To run the project, type `flutter run` in your command prompt/terminal or run the app in debug mode in visual studio. This will build the project and install it on your connected device or emulator.
 
-### Build and Run
-
-1. Make sure to connect your mobile device or start an emulator.
-
-2. To run the project, type flutter run in your command prompt or run the app in debug mode in visual studio.This will build the project and install it on your connected device or emulator.
+5. Here are the all the commands to get up and running.
+```bash
+git clone https://github.com/monty-iggy-xtius/WeatherApp.git
+cd WeatherApp
+flutter doctor
+flutter pub get
+flutter run
+```
 
 ## Usage
 

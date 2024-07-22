@@ -22,6 +22,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
   // create an empty list of data to be received
   Map retrivedWeatherData = {};
+  bool isDataAvailable = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +35,14 @@ class _WeatherPageState extends State<WeatherPage> {
 
     // retrivedWeatherData = ModalRoute.of(context)!.settings.arguments;
 
-    handleClick(int item, context) async {
+    void handleClick(int item, context) async {
       switch (item) {
         case 0:
           dynamic result = await Navigator.pushNamed(context, "/search");
 
           setState(() {
+            isDataAvailable = true;
+
             retrivedWeatherData = {
               "cityName": result['weatherData'].cityName,
               "condition": result['weatherData'].condition,
@@ -52,6 +55,8 @@ class _WeatherPageState extends State<WeatherPage> {
               "forecast": result['weatherData'].forecast,
               "img": result['weatherData'].img.split("/")
             };
+
+            
           });
 
         case 1:
@@ -59,7 +64,7 @@ class _WeatherPageState extends State<WeatherPage> {
       }
     }
 
-    getDay(String dateValue) {
+    String getDay(String dateValue) {
       // this function converts a date str into a readable weekday
       final dateParsed = DateTime.parse(dateValue);
       int weekday = dateParsed.weekday;
@@ -88,15 +93,17 @@ class _WeatherPageState extends State<WeatherPage> {
     var bottomScrollWidgets = [];
 
     retrivedWeatherData.isNotEmpty
-        ? bottomScrollWidgets = [
-            additionalConditions(
+        ? bottomScrollWidgets = 
+          [additionalConditions(
                 Colors.teal.shade400,
                 retrivedWeatherData['forecast'][1]['day']['avgtemp_c'] != null
                     ? retrivedWeatherData['forecast'][1]['day']['avgtemp_c']
                         .toString()
                     : "----",
                 getDay(retrivedWeatherData['forecast'][1]['date']),
-                retrivedWeatherData['forecast'][1]['day']['condition']['text']),
+                retrivedWeatherData['forecast'][1]['day']['condition']['text'],
+                isDataAvailable
+                ),
             additionalConditions(
                 Colors.teal.shade400,
                 retrivedWeatherData['forecast'][2]['day']['avgtemp_c'] != null
@@ -104,7 +111,9 @@ class _WeatherPageState extends State<WeatherPage> {
                         .toString()
                     : "----",
                 getDay(retrivedWeatherData['forecast'][2]['date']),
-                retrivedWeatherData['forecast'][2]['day']['condition']['text']),
+                retrivedWeatherData['forecast'][2]['day']['condition']['text'],
+                isDataAvailable
+                ),
             additionalConditions(
                 Colors.teal.shade400,
                 retrivedWeatherData['forecast'][3]['day']['avgtemp_c'] != null
@@ -112,15 +121,17 @@ class _WeatherPageState extends State<WeatherPage> {
                         .toString()
                     : "----",
                 getDay(retrivedWeatherData['forecast'][3]['date']),
-                retrivedWeatherData['forecast'][3]['day']['condition']['text']),
-          ]
+                retrivedWeatherData['forecast'][3]['day']['condition']['text'],
+                isDataAvailable)
+                ]
         : bottomScrollWidgets = [
-            additionalConditions(Colors.teal.shade400, "0", "----", "----")
+            additionalConditions(Colors.teal.shade400, "0", "----", "----", isDataAvailable)
           ];
 
     return Scaffold(
       // extend body height behind app bar
       extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: PopupMenuButton<int>(
           color: Colors.teal[400],
@@ -191,6 +202,7 @@ class _WeatherPageState extends State<WeatherPage> {
                           : "images/day/185.png"),
                       // image: AssetImage(image),
                       fit: BoxFit.contain,
+                      filterQuality: FilterQuality.high,
                       scale: 1)),
             ),
 
@@ -306,7 +318,7 @@ class _WeatherPageState extends State<WeatherPage> {
 }
 
 Widget additionalConditions(
-        Color containerColor, String temp, String day, String condition) =>
+        Color containerColor, String temp, String day, String condition, bool foreCastData) =>
     Container(
       margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
       width: 155,
@@ -315,7 +327,7 @@ Widget additionalConditions(
           color: containerColor,
           borderRadius: const BorderRadius.all(Radius.circular(23.0))),
       child: Center(
-        child: SingleChildScrollView(
+        child:  foreCastData ? SingleChildScrollView(
           padding: const EdgeInsets.all(0),
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.start,
@@ -352,6 +364,10 @@ Widget additionalConditions(
                       letterSpacing: 1.0))
             ],
           ),
-        ),
+        ):
+        CircularProgressIndicator(
+            backgroundColor: Colors.white,
+            color: Colors.teal.shade400,
+            ),
       ),
     );

@@ -6,7 +6,7 @@ import 'package:weatherapp/models/weathermodel.dart';
 class GetWeatherService {
   Future<WeatherModel> queryWeatherApi(String query) async {
     final queryParam = {
-      'key': '179abcc559464fa08e845456242905',
+      'key': 'b059190bf20a4737ad0132751241707',
       'q': query,
       'days': '4',
       'aqi': 'no',

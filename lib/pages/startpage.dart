@@ -24,12 +24,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // extend body height behind app bar
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       body: Center(
-        child: SpinKitFoldingCube(
-          size: 80,
-          color: Colors.teal[200],
-          duration: const Duration(seconds: 2),
+        child: SpinKitDualRing(
+          size: 60,
+          color: Colors.teal.shade400,
+          duration: const Duration(seconds: 3),
         ),
       ),
     );
