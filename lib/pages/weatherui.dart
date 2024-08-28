@@ -1,9 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:weatherapp/provider/theme_provider.dart';
+import 'package:weatherapp/components/app_drawer.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -13,12 +11,7 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-  @override
-  void initState() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.top]);
-    super.initState();
-  }
+
 
   // create an empty list of data to be received
   Map retrivedWeatherData = {};
@@ -26,42 +19,31 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    // get the theme provider
-    final provider = Provider.of<ToggleThemeProvider>(context);
-
     // get width and height of screen
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
 
     // retrivedWeatherData = ModalRoute.of(context)!.settings.arguments;
 
-    void handleClick(int item, context) async {
-      switch (item) {
-        case 0:
-          dynamic result = await Navigator.pushNamed(context, "/search");
+    void handleSearch() async {
+      dynamic result = await Navigator.pushNamed(context, "/search");
 
-          setState(() {
-            isDataAvailable = true;
+      setState(() {
+        isDataAvailable = true;
 
-            retrivedWeatherData = {
-              "cityName": result['weatherData'].cityName,
-              "condition": result['weatherData'].condition,
-              "temperature": result['weatherData'].temperature,
-              "windSpeed": result['weatherData'].windSpeed,
-              "humidity": result['weatherData'].humidity,
-              "visibility": result['weatherData'].visibility,
-              "gust": result['weatherData'].gust,
-              "is_day": result['weatherData'].is_day,
-              "forecast": result['weatherData'].forecast,
-              "img": result['weatherData'].img.split("/")
-            };
-
-            
-          });
-
-        case 1:
-          provider.toggleCurrentTheme();
-      }
+        retrivedWeatherData = {
+          "cityName": result['weatherData'].cityName,
+          "condition": result['weatherData'].condition,
+          "temperature": result['weatherData'].temperature,
+          "windSpeed": result['weatherData'].windSpeed,
+          "humidity": result['weatherData'].humidity,
+          "visibility": result['weatherData'].visibility,
+          "gust": result['weatherData'].gust,
+          "is_day": result['weatherData'].is_day,
+          "forecast": result['weatherData'].forecast,
+          "img": result['weatherData'].img.split("/")
+        };
+      });
     }
 
     String getDay(String dateValue) {
@@ -93,8 +75,8 @@ class _WeatherPageState extends State<WeatherPage> {
     var bottomScrollWidgets = [];
 
     retrivedWeatherData.isNotEmpty
-        ? bottomScrollWidgets = 
-          [additionalConditions(
+        ? bottomScrollWidgets = [
+            additionalConditions(
                 Colors.teal.shade400,
                 retrivedWeatherData['forecast'][1]['day']['avgtemp_c'] != null
                     ? retrivedWeatherData['forecast'][1]['day']['avgtemp_c']
@@ -102,8 +84,7 @@ class _WeatherPageState extends State<WeatherPage> {
                     : "----",
                 getDay(retrivedWeatherData['forecast'][1]['date']),
                 retrivedWeatherData['forecast'][1]['day']['condition']['text'],
-                isDataAvailable
-                ),
+                isDataAvailable),
             additionalConditions(
                 Colors.teal.shade400,
                 retrivedWeatherData['forecast'][2]['day']['avgtemp_c'] != null
@@ -112,8 +93,7 @@ class _WeatherPageState extends State<WeatherPage> {
                     : "----",
                 getDay(retrivedWeatherData['forecast'][2]['date']),
                 retrivedWeatherData['forecast'][2]['day']['condition']['text'],
-                isDataAvailable
-                ),
+                isDataAvailable),
             additionalConditions(
                 Colors.teal.shade400,
                 retrivedWeatherData['forecast'][3]['day']['avgtemp_c'] != null
@@ -123,52 +103,36 @@ class _WeatherPageState extends State<WeatherPage> {
                 getDay(retrivedWeatherData['forecast'][3]['date']),
                 retrivedWeatherData['forecast'][3]['day']['condition']['text'],
                 isDataAvailable)
-                ]
+          ]
         : bottomScrollWidgets = [
-            additionalConditions(Colors.teal.shade400, "0", "----", "----", isDataAvailable)
+            additionalConditions(
+                Colors.teal.shade400, "0", "----", "----", isDataAvailable)
           ];
 
     return Scaffold(
       // extend body height behind app bar
-      extendBodyBehindAppBar: true,
-      backgroundColor: Colors.white,
+      // extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        leading: PopupMenuButton<int>(
-          color: Colors.teal[400],
-          onSelected: (item) => handleClick(item, context),
-          itemBuilder: (context) => [
-            const PopupMenuItem<int>(
-                value: 0,
-                child: Text(
-                  'Search',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Rale",
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 0),
+              child: GestureDetector(
+                onTap: () => handleSearch(),
+                child: Icon(Icons.search_rounded, size: 30, color: Theme.of(context).colorScheme.inversePrimary,
                 )),
-            const PopupMenuItem<int>(
-                value: 1,
-                child: Text(
-                  'Toggle Theme',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Rale",
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1),
-                )),
-          ],
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+            )]
+            ),
+
+      drawer: const HomePageDrawer(),
       body: Padding(
-        padding: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.fromLTRB(6.0, 0, 6.0, 6.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(height: _height * 0.028),
 
             Text(
               retrivedWeatherData.isNotEmpty
@@ -199,7 +163,7 @@ class _WeatherPageState extends State<WeatherPage> {
                           ? retrivedWeatherData['is_day'] == 1
                               ? "images/day/${retrivedWeatherData["img"].last}"
                               : "images/night/${retrivedWeatherData["img"].last}"
-                          : "images/day/185.png"),
+                          : "images/day/113.png"),
                       // image: AssetImage(image),
                       fit: BoxFit.contain,
                       filterQuality: FilterQuality.high,
@@ -212,7 +176,7 @@ class _WeatherPageState extends State<WeatherPage> {
             Text(
               retrivedWeatherData.isNotEmpty
                   ? retrivedWeatherData['condition']
-                  : "Pretty Chilly",
+                  : "Nice Weather",
               style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 21,
@@ -236,7 +200,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                 : "0",
                             style: const TextStyle(
                                 fontSize: 74,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontFamily: "Rale")),
                         const TextSpan(
                             text: " °C",
@@ -259,27 +223,27 @@ class _WeatherPageState extends State<WeatherPage> {
                                   ? "Wind Speed: ${retrivedWeatherData['windSpeed']} kph"
                                   : "Wind Speed: 0",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  fontFamily: "Genos"),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  fontFamily: "Arial"),
                             ),
                             Text(
                               retrivedWeatherData.isNotEmpty
                                   ? "Visibility: ${retrivedWeatherData['visibility']} km"
                                   : "Visibility: 0",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  fontFamily: "Genos"),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  fontFamily: "Arial"),
                             ),
                             Text(
                               retrivedWeatherData.isNotEmpty
                                   ? "Humidity: ${retrivedWeatherData['humidity']}"
                                   : "Humidity: 0",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  fontFamily: "Genos"),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  fontFamily: "Arial"),
                             )
                           ],
                         ),
@@ -295,7 +259,7 @@ class _WeatherPageState extends State<WeatherPage> {
                 options: CarouselOptions(
                   autoPlay: true,
                   autoPlayInterval: const Duration(seconds: 3),
-                  height: 155,
+                  height: 170,
                   // space items in the carousel differently depending on  screen size
                   viewportFraction: 0.36,
 
@@ -317,57 +281,60 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 }
 
-Widget additionalConditions(
-        Color containerColor, String temp, String day, String condition, bool foreCastData) =>
+Widget additionalConditions(Color containerColor, String temp, String day,
+        String condition, bool foreCastData) =>
     Container(
       margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
-      width: 155,
-      height: 155,
+      width: 165,
+      height: 165,
+      padding: const EdgeInsets.all(0),
       decoration: BoxDecoration(
           color: containerColor,
           borderRadius: const BorderRadius.all(Radius.circular(23.0))),
       child: Center(
-        child:  foreCastData ? SingleChildScrollView(
-          padding: const EdgeInsets.all(0),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(day,
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 26.5,
-                      fontFamily: 'Genos',
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0)),
-              Text("$temp °C",
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.5,
-                      fontFamily: 'Genos',
-                      overflow: TextOverflow.fade,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0)),
-              Text(condition,
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.5,
-                      fontFamily: 'Genos',
-                      overflow: TextOverflow.fade,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0))
-            ],
-          ),
-        ):
-        CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            color: Colors.teal.shade400,
-            ),
+        child: foreCastData
+            ? SingleChildScrollView(
+                padding: const EdgeInsets.all(0),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(day,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontFamily: 'Genos',
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                            letterSpacing: 1.0)),
+                    Text("$temp °C",
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24.5,
+                            fontFamily: 'Genos',
+                            overflow: TextOverflow.fade,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.0)),
+                    Text(condition,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.5,
+                            fontFamily: 'Genos',
+                            overflow: TextOverflow.fade,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.0))
+                  ],
+                ),
+              )
+            : CircularProgressIndicator(
+                backgroundColor: Colors.white,
+                color: Colors.teal.shade400,
+              ),
       ),
     );

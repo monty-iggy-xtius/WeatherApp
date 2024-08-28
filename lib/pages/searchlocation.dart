@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:weatherapp/components/custom_snackbar.dart';
 import 'package:weatherapp/models/weathermodel.dart';
@@ -19,12 +18,6 @@ class _SearchLocationState extends State<SearchLocation> {
   // when the data arrives set it back to false indicating no loading 
   bool isLoading = false;
 
-  @override
-  void initState() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.top]);
-    super.initState();
-  }
 
   // values to use on the current page
   final _searchPageKey = GlobalKey<FormState>();
@@ -37,9 +30,7 @@ class _SearchLocationState extends State<SearchLocation> {
     double _height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      // extend body height behind app bar
-      extendBodyBehindAppBar: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: isLoading ? Center(
         child: SpinKitDualRing(
           color: Colors.teal.shade400,
@@ -59,13 +50,13 @@ class _SearchLocationState extends State<SearchLocation> {
                 // some padding to push the image a bit into the container 
                 padding: const EdgeInsets.only(top: 50, bottom: 30),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.teal.shade400,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 4,
                       blurRadius: 4,
-                      offset: const Offset(3, 3), // changes position of shadow
+                      offset: const Offset(2, 2), // changes position of shadow
                     ),
                   ],
                   // curve the bottoms a little 
@@ -73,6 +64,7 @@ class _SearchLocationState extends State<SearchLocation> {
                 ),
                 child: const Image(
                   image: AssetImage("images/day/122.png"),
+                  isAntiAlias: true,
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.high,
                   ),
@@ -116,8 +108,8 @@ class _SearchLocationState extends State<SearchLocation> {
                           // should be a white border all round the input field
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(13),
-                              borderSide: const BorderSide(
-                                color: Colors.white,
+                              borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.surface,
                               ))),
                       validator: (value) => value!.isEmpty
                           ? "Please type in a location"
@@ -145,7 +137,7 @@ class _SearchLocationState extends State<SearchLocation> {
                         child: Container(
                             width: 175,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 3.0, vertical: 15),
+                                horizontal: 3.0, vertical: 13),
                             decoration: BoxDecoration(
                               color: Colors.teal.shade400,
                               borderRadius: BorderRadius.circular(8),
@@ -156,7 +148,7 @@ class _SearchLocationState extends State<SearchLocation> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 17.3)),
+                                      fontSize: 17.7)),
                             )),
                       )),
                 ],

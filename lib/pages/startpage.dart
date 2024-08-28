@@ -26,7 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
       // extend body height behind app bar
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Center(
         child: SpinKitDualRing(
           size: 60,

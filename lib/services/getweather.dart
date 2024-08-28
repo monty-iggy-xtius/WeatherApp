@@ -5,8 +5,10 @@ import 'package:weatherapp/models/weathermodel.dart';
 // this class queries the weather api for the current weather data
 class GetWeatherService {
   Future<WeatherModel> queryWeatherApi(String query) async {
+
+    // query a 4 day forecast
     final queryParam = {
-      'key': 'b059190bf20a4737ad0132751241707',
+      'key': 'YOUR-API-KEY',
       'q': query,
       'days': '4',
       'aqi': 'no',
@@ -22,6 +24,7 @@ class GetWeatherService {
       // parse the body of the response
       var resultParsed = jsonDecode(result.body);
 
+      // check if an error occurred in the response
       if (resultParsed.containsKey('error')) {
         final weatherDataToModel = WeatherModel(
             cityName: null,
